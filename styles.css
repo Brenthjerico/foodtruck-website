@@ -1,0 +1,499 @@
+:root {
+    --primary: #87CEEB;
+    --secondary: #808080;
+    --bg: #f9f9f9;
+    --white: #fff;
+    --green: #28a745;
+    --red: #dc3545;
+    --dark-primary: #5a9fd4; /* Added for hover states */
+}
+
+body.inside-theme {
+    --primary: #D2B48C;
+    --secondary: #fff;
+    --bg: #f0e8d9;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: #333;
+    transition: all 0.3s;
+}
+
+/* Header Styles */
+header {
+    background: var(--primary);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#searchBar {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 20px;
+    width: 200px;
+}
+
+#totals {
+    display: flex;
+    gap: 1rem;
+    font-weight: bold;
+}
+
+.total-income { 
+    color: var(--green); 
+}
+
+.total-expense { 
+    color: var(--red); 
+}
+
+/* General Button Styles */
+button {
+    background: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button:hover { 
+    opacity: 0.8; 
+}
+
+/* Three Dots and Dropdown */
+#threeDots {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+}
+
+#dropdown {
+    position: absolute;
+    top: 60px;
+    right: 1rem;
+    background: var(--white);
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    display: none;
+    z-index: 10;
+}
+
+#dropdown button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border-radius: 0;
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#sheets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.sheet {
+    background: var(--white);
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.sheet:hover { 
+    transform: scale(1.05); 
+    transition: 0.2s; 
+}
+
+.sheet-icon { 
+    font-size: 2rem; 
+    color: var(--primary); 
+    margin-bottom: 0.5rem; 
+}
+
+.sheet.selected { 
+    background: var(--primary); 
+    color: var(--white); 
+}
+
+.sheet-options { 
+    display: none; 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    background: var(--secondary); 
+    padding: 0.2rem; 
+    border-radius: 0 10px 0 10px; 
+}
+
+.sheet:hover .sheet-options { 
+    display: block; 
+}
+
+.sheet-options button { 
+    background: none; 
+    color: var(--white); 
+    padding: 0.2rem; 
+    font-size: 0.8rem; 
+}
+
+/* Fixed Buttons (Plus and Order) */
+#plusBtn, #orderBtn {
+    position: fixed;
+    bottom: 20px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: var(--white);
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+#plusBtn { 
+    right: 20px; 
+    background: var(--primary); 
+    display: none; 
+}
+
+#orderBtn { 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: var(--secondary); 
+    display: block; 
+}
+
+/* Modal Styles - Centered for Add and Settings, Full-Screen for Order */
+#addModal, #settingsModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 20;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+
+
+#orderModal {
+    display: none; /* keep hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--white);
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 20;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header and search bar fixed height at top */
+#orderModal > h3 {
+    margin: 0;
+    padding: 1rem;
+    background: var(--primary);
+    color: var(--white);
+    text-align: center;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+#orderModal #menuSearchBar {
+    width: 100%;
+    padding: 1rem;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #f9f9f9;
+    flex-shrink: 0;
+}
+
+#orderModal #menuSearchBar:focus {
+    outline: none;
+    background: white;
+    border-bottom-color: var(--primary);
+}
+
+#orderModal #menuSearchBar:focus {
+    outline: none;
+    background: white;
+    border-bottom-color: var(--primary);
+}
+
+/* ADDED/EDITED: Main Content Container - Exact Portrait Proportions (25% Top, 60% Middle, 15% Bottom) */
+#orderModalContent {
+    display: grid; /* ADDED: Grid for exact row percentages (portrait downwards stacking) */
+    grid-template-rows: 0%; /* ADDED: Top 25% (categories), Middle 60% (menu), Bottom 15% (calculator) */
+    grid-template-columns: 1fr; /* ADDED: Full-width single column for portrait (no horizontal) */
+    height: calc(100vh - 140px); /* ADDED: Fills remaining height after header (~60px) + search (~80px) */
+    width: 100%;
+    overflow: hidden; /* ADDED: No overflow outside boxes */
+    gap: 0; /* ADDED: No gaps between boxes for seamless portrait */
+}
+
+/* ADDED/EDITED: Box 1 - Categories (Top 25%, Fixed Non-Scrollable, 8 Buttons for ICED COFFEE, MATCHA, etc.) */
+#categoriesBox {
+    grid-row: 1; /* ADDED: Positions in top 25% row */
+    background: #f9f9f9;
+    border-bottom: 1px solid var(--primary);
+    padding: 0.5rem;
+    overflow: hidden; /* ADDED: No scroll in categories */
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* ADDED: Tight spacing for 25% height */
+}
+
+#categoriesBox h4 {
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+    color: var(--primary);
+    font-size: 1rem;
+    flex-shrink: 0; /* ADDED: Doesn't compress buttons */
+}
+
+/* ADDED: Category Filter Buttons (Fit 8 in 25% Height: Horizontal Flex-Wrap) */
+#categoriesBox .category-btn-container { /* ADDED: Wrapper for buttons to flex-wrap in portrait */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 0.25rem;
+    flex: 1; /* ADDED: Fills remaining 25% after h4 */
+}
+
+.category-btn {
+    background: var(--white);
+    border: 1px solid var(--primary);
+    padding: 0.4rem 0.6rem; /* ADDED: Compact for 8 buttons in 25% */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.8rem; /* ADDED: Small text to fit 8 (ICED COFFEE, MATCHA, MILKY, FRUITSODA, YAKULT, FRUIT TEA, HOT DRINKS, ADD ONS) */
+    flex: 1 1 45%; /* ADDED: Auto-size, wrap to 2 rows if needed in portrait */
+    min-width: 80px; /* ADDED: Minimum width for readability */
+}
+
+.category-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.category-btn.active {
+    background: var(--primary);
+    color: var(--white);
+    font-weight: bold;
+}
+
+/* ADDED/EDITED: Box 2 - Menu List (Middle 60%, Scrollable Vertically) */
+#menuItemsBox {
+    grid-row: 2; /* ADDED: Positions in middle 60% row */
+    overflow-y: auto; /* ADDED: Vertical scroll only (portrait downwards for long menus) */
+    overflow-x: hidden; /* ADDED: No horizontal scroll */
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 0;
+    background: var(--white);
+    border: none;
+}
+
+#orderModal .category { /* EDITED: Scoped to modal for menu categories */
+    margin-bottom: 1.5rem;
+}
+
+#orderModal .category h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+#orderModal .menu-item {
+    background: #f9f9f9;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+#orderModal .menu-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#orderModal .menu-item i {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+#orderModal .menu-item h5 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+#orderModal .menu-item p {
+    margin: 0.25rem 0;
+    font-weight: bold;
+    color: var(--green);
+}
+
+#orderModal .menu-item button {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+#orderModal .menu-item button:hover {
+    opacity: 0.8;
+}
+
+/* EDITED: No Results in Menu Box (Centered in 60% Scrollable Area) */
+#noResults {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    margin: 1rem;
+}
+
+/* ADDED/EDITED: Box 3 - Calculator (Bottom 15%, Fixed Non-Scrollable) */
+#calculatorBox {
+    grid-row: 3; /* ADDED: Positions in bottom 15% row */
+    background: #f9f9f9;
+    border-top: 1px solid var(--primary);
+    padding: 0.5rem;
+    overflow: hidden; /* ADDED: No scroll in calculator */
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* ADDED: Tight spacing for 15% height */
+    height: 100%; /* ADDED: Fills exact 15% */
+}
+
+#calculatorBox h4 {
+    margin: 0;
+    text-align: center;
+    color: var(--primary);
+    font-size: 0.9rem; /* ADDED: Compact for 15% */
+    flex-shrink: 0;
+}
+
+#cartList {
+    list-style: none;
+    padding: 0;
+    margin: 0.25rem 0;
+    max-height: 40%; /* ADDED: Limit cart list to fit 15% */
+    overflow-y: auto; /* ADDED: Tiny scroll if many items, but rare */
+}
+
+#cartList li {
+    padding: 0.25rem;
+    border-bottom: 1px solid #eee;
+    background: var(--white);
+    margin-bottom: 0.25rem;
+    border-radius: 3px;
+    font-size: 0.8rem; /* ADDED: Small text for compact */
+}
+
+#orderTotal { /* Assuming p for total */
+    margin: 0.25rem 0;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.client-money-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0.25rem 0;
+    flex-shrink: 0;
+}
+
+#clientMoney {
+    flex: 1;
+    padding: 0.4rem;
+    border: 1px solid var(--primary);
+    border-radius: 3px;
+    font-size: 0.8rem; /* ADDED: Compact for 15% */
+    box-sizing: border-box;
+}
+
+.calculate-btn {
+    padding: 0.4rem 0.6rem;
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8rem; /* ADDED: Small for 15% */
+}
+
+#changeDisplay {
+    font-weight: bold;
+    padding: 0.4rem;
+    background: var(--white);
+    border: 1px solid var(--primary);
+    border-radius: 3px;
+    text-align: center;
+    margin: 0.25rem 0;
+    font-size: 0.9rem; /* ADDED: Compact */
+    transition: color 0.3s, background 0.3s;
+    flex-shrink: 0;
+}
+
+#changeDisplay.positive {
+    color: var(--green);
+}
+
+#changeDisplay.negative {
+    color: var(--red);
+    background: #ffe6e6;
+}
+
+#changeDisplay.exact {
+    color: var(--green);
+}

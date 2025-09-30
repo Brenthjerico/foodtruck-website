@@ -1,0 +1,32 @@
+// EDITED: Reset filter on modal open (add to your toggleOrderModal())
+function toggleOrderModal() {
+    const modal = document.getElementById('orderModal');
+    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    if (modal.style.display === 'flex') {
+        document.getElementById('menuSearchBar').value = ''; // Clear search
+        filterByCategory('all'); // Reset to All categories
+        clearCart(); // Optional: Reset cart
+    }
+    document.body.classList.toggle('modal-open', modal.style.display === 'flex');
+}
+let history = JSON.parse(localStorage.getItem('history')) || [];
+let savedOrders = JSON.parse(localStorage.getItem('savedOrders')) || [];
+let currentSheet = null;
+let cart = {}; // For order cart {item: {price, qty}}
+let orderTotal = 0;
+let clientMoney = 0; // Client's paid amount
+
+// Toggle Order Modal (Order Button)
+  function toggleOrderModal() {
+      document.getElementById('orderModal').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      cart = {}; // Existing reset
+      orderTotal = 0;
+      clientMoney = 0;
+      document.getElementById('clientMoney').value = '';
+      updateCartSummary();
+      calculateChange();
+      // New lines: Clear and reset search
+      document.getElementById('menuSearchBar').value = '';
+      filterMenuItems(); // Show all items
+  }

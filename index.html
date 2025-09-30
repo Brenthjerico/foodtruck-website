@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyBlue Bites Food Truck</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <input type="text" id="searchBar" placeholder="Search..." oninput="filterContent()">
+        <div id="totals">
+            <span class="total-income"><i class="fas fa-plus"></i> PHP <span id="totalIncome">0</span></span>
+            <span class="total-expense"><i class="fas fa-minus"></i> PHP <span id="totalExpense">0</span></span>
+        </div>
+        <div>
+            <button onclick="toggleOrderModal()"><i class="fas fa-utensils"></i> Order</button>
+            <button id="threeDots" onclick="toggleDropdown()">⋯</button>
+            <div id="dropdown">
+                <button onclick="newSheet()">New Sheet</button>
+                <button onclick="toggleSettings()">Settings</button>
+                <button onclick="clearHistory()">Clear History</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="sheets"></section>
+
+        <section id="savedOrders">
+            <h3>Saved Orders</h3>
+            <div id="ordersList"></div>
+        </section>
+
+        <section id="history">
+            <h3>History</h3>
+            <div id="historyList"></div>
+        </section>
+    </main>
+
+    <button id="plusBtn" onclick="toggleAddModal()"><i class="fas fa-plus"></i></button>
+
+    <div id="overlay" onclick="closeModals()"></div>
+
+    <div id="addModal">
+        <h3>Add Entry</h3>
+        <form id="addForm">
+            <input type="number" id="amount" placeholder="Amount (PHP)" required>
+            <select id="type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+            <select id="sheetSelect"></select>
+            <input type="datetime-local" id="datetime">
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <div id="orderModal">
+    <h3>Drink Menu</h3>
+    <input type="text" id="menuSearchBar" placeholder="Search flavors (e.g., latte, strawberry, matcha)..." oninput="filterMenuItems()">
+
+    <div id="orderModalContent">
+        <!-- Left side: Menu List (70% width) -->
+        <div id="menuItemsBox">
+            <div id="menuList">
+                <!-- No Results Message -->
+                <div id="noResults" style="display: none; text-align: center; padding: 20px; color: #666; font-style: italic;">
+                    No matching drinks found. Try another flavor.
+                </div>
+
+                <!-- Paste all your existing categories and menu items here -->
+                <!-- Example: -->
+                <div class="category" data-category="iced-coffee">
+                    <h4><i class="fas fa-coffee"></i> ICED COFFEE</h4>
+                <div class="menu-item">
+                    <i class="fas fa-coffee"></i>
+                    <h5>Americano (M)</h5>
+                    <p>PHP 60</p>
+                    <button onclick="addToOrder('Americano (M)', 60)">Add</button>
+                </div>
+                            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Americano (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Americano (L)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Cafe Latte (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Cafe Latte (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Cafe Latte (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Cafe Latte (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>French Vanilla (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('French Vanilla (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>French Vanilla (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('French Vanilla (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Spanish Latte (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Spanish Latte (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Spanish Latte (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Spanish Latte (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Cappuccino (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Cappuccino (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Cappuccino (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Cappuccino (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Vanilla Latte (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Vanilla Latte (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Vanilla Latte (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Vanilla Latte (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Salted Caramel (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Salted Caramel (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Salted Caramel (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Salted Caramel (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Caramel Latte (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Caramel Latte (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Caramel Latte (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Caramel Latte (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Strawberry Latte (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Strawberry Latte (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Strawberry Latte (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Strawberry Latte (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Caramel Macchiato (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Caramel Macchiato (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Caramel Macchiato (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Caramel Macchiato (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>White Mocha Latte (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('White Mocha Latte (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>White Mocha Latte (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('White Mocha Latte (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Dark Mocha Latte (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Dark Mocha Latte (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Dark Mocha Latte (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Dark Mocha Latte (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Hazelnut Macchiato (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Hazelnut Macchiato (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Hazelnut Macchiato (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Hazelnut Macchiato (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Hazelnut Mocha Macchiato (M)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Hazelnut Mocha Macchiato (M)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Hazelnut Mocha Macchiato (L)</h5>
+                <p>PHP 120</p>
+                <button onclick="addToOrder('Hazelnut Mocha Macchiato (L)', 120)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Barista Drink (M)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Barista Drink (M)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Barista Drink (L)</h5>
+                <p>PHP 120</p>
+                <button onclick="addToOrder('Barista Drink (L)', 120)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Biscoff Latte (M)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Biscoff Latte (M)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Biscoff Latte (L)</h5>
+                <p>PHP 120</p>
+                <button onclick="addToOrder('Biscoff Latte (L)', 120)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Sea Salt Latte (M)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Sea Salt Latte (M)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-coffee"></i>
+                <h5>Sea Salt Latte (L)</h5>
+                <p>PHP 120</p>
+                <button onclick="addToOrder('Sea Salt Latte (L)', 120)">Add</button>
+            </div>
+            <!-- 2. MATCHA SERIES (Medium and Large only) -->
+        <div class="category">
+            <h4><i class="fas fa-leaf"></i> MATCHA SERIES</h4>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Pure Matcha (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Pure Matcha (M)', 70)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Pure Matcha (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Pure Matcha (L)', 90)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Iced Matcha (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Iced Matcha (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Iced Matcha (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Iced Matcha (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Strawberry Matcha (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Strawberry Matcha (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Strawberry Matcha (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Strawberry Matcha (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Matcha Fusion (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Matcha Fusion (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Matcha Fusion (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Matcha Fusion (L)', 100)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Sea Salt Matcha (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Sea Salt Matcha (M)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-leaf"></i>
+                <h5>Sea Salt Matcha (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Sea Salt Matcha (L)', 100)">Add</button>
+            </div>
+        </div>
+
+        <!-- 3. MILKY SERIES (Medium and Large only) -->
+        <div class="category">
+            <h4><i class="fas fa-milk-bottle"></i> MILKY SERIES</h4>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Strawberry (M)</h5>
+                <p>PHP 60</p>
+                <button onclick="addToOrder('Milky Strawberry (M)', 60)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Strawberry (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Strawberry (L)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Blueberry (M)</h5>
+                <p>PHP 60</p>
+                <button onclick="addToOrder('Milky Blueberry (M)', 60)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Blueberry (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Blueberry (L)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Chocolate (M)</h5>
+                <p>PHP 60</p>
+                <button onclick="addToOrder('Milky Chocolate (M)', 60)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Chocolate (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Chocolate (L)', 80)">Add</button>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Caramel (M)</h5>
+                <p>PHP 60</p>
+                <button onclick="addToOrder('Milky Caramel (M)', 60)">Add</button>"
+            </div>  
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Caramel (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Caramel (L)', 80)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Oreo (M)</h5>
+                <p>PHP 60</p>
+                <button onclick="addToOrder('Milky Oreo (M)', 60)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Oreo (L)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Oreo (L)', 80)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Berry (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Milky Choco Berry (M)', 70)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Berry (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Milky Choco Berry (L)', 90)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Lava (M)</h5>
+                <p>PHP 70</p>
+                <button onclick="addToOrder('Milky Choco Lava (M)', 70)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Lava (L)</h5>
+                <p>PHP 90</p>
+                <button onclick="addToOrder('Milky Choco Lava (L)', 90)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Chocoberry Lava (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Chocoberry Lava (M)', 80)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Chocoberry Lava (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Milky Chocoberry Lava (L)', 100)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Hazelnut (M)</h5>
+                <p>PHP 80</p>
+                <button onclick="addToOrder('Milky Choco Hazelnut (M)', 80)">Add</button>"
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-milk-bottle"></i>
+                <h5>Milky Choco Hazelnut (L)</h5>
+                <p>PHP 100</p>
+                <button onclick="addToOrder('Milky Choco Hazelnut (L)', 100)">Add</button>"
+            </div>
+
+            <!-- 4. FRUIT SODA SERIES (S/M/L sizes) -->
+                <div class="category">
+                    <h4><i class="fas fa-lemon"></i> FRUIT SODA SERIES</h4>
+                <!-- Lychee -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (S)</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Lychee (S)', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (M)</h5>
+                        <p>PHP 39</p>
+                        <button onclick="addToOrder('Lychee (M)', 39)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (L)</h5>
+                        <p>PHP 49</p>
+                        <button onclick="addToOrder('Lychee (L)', 49)">Add</button>
+                    </div>
+                <!-- Green Apple -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (S)</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Green Apple (S)', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (M)</h5>
+                        <p>PHP 39</p>
+                        <button onclick="addToOrder('Green Apple (M)', 39)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (L)</h5>
+                        <p>PHP 49</p>
+                        <button onclick="addToOrder('Green Apple (L)', 49)">Add</button>
+                    </div>
+                <!-- Strawberry -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (S)</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Strawberry (S)', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (M)</h5>
+                        <p>PHP 39</p>
+                        <button onclick="addToOrder('Strawberry (M)', 39)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (L)</h5>
+                        <p>PHP 49</p>
+                        <button onclick="addToOrder('Strawberry (L)', 49)">Add</button>
+                    </div>
+                <!-- Blueberry -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (S)</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Blueberry (S)', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (M)</h5>
+                        <p>PHP 39</p>
+                        <button onclick="addToOrder('Blueberry (M)', 39)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (L)</h5>
+                        <p>PHP 49</p>
+                        <button onclick="addToOrder('Blueberry (L)', 49)">Add</button>
+                    </div>
+                <!-- Blue Lemonade -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (S)</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Blue Lemonade (S)', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (M)</h5>
+                        <p>PHP 39</p>
+                        <button onclick="addToOrder('Blue Lemonade (M)', 39)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (L)</h5>
+                        <p>PHP 49</p>
+                        <button onclick="addToOrder('Blue Lemonade (L)', 49)">Add</button>
+                    </div>
+                </div>
+
+                <!-- 5. YAKULT SERIES (S/M/L sizes) -->
+                <div class="category">
+                    <h4><i class="fas fa-lemon"></i> YAKULT SERIES</h4>
+                <!-- Strawberry -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (S)</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Strawberry Yakult (S)', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (M)</h5>
+                        <p>PHP 55</p>
+                        <button onclick="addToOrder('Strawberry Yakult (M)', 55)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Strawberry (L)</h5>
+                        <p>PHP 65</p>
+                        <button onclick="addToOrder('Strawberry Yakult (L)', 65)">Add</button>
+                    </div>
+                <!-- Blueberry -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (S)</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Blueberry Yakult (S)', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (M)</h5>
+                        <p>PHP 55</p>
+                        <button onclick="addToOrder('Blueberry Yakult (M)', 55)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blueberry (L)</h5>
+                        <p>PHP 65</p>
+                        <button onclick="addToOrder('Blueberry Yakult (L)', 65)">Add</button>
+                    </div>
+                <!-- Green Apple -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (S)</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Green Apple Yakult (S)', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (M)</h5>
+                        <p>PHP 55</p>
+                        <button onclick="addToOrder('Green Apple Yakult (M)', 55)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Green Apple (L)</h5>
+                        <p>PHP 65</p>
+                        <button onclick="addToOrder('Green Apple Yakult (L)', 65)">Add</button>
+                    </div>
+                <!-- Lychee -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (S)</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Lychee Yakult (S)', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (M)</h5>
+                        <p>PHP 55</p>
+                        <button onclick="addToOrder('Lychee Yakult (M)', 55)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Lychee (L)</h5>
+                        <p>PHP 65</p>
+                        <button onclick="addToOrder('Lychee Yakult (L)', 65)">Add</button>
+                    </div>
+                <!-- Blue Lemonade -->
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (S)</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Blue Lemonade Yakult (S)', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (M)</h5>
+                        <p>PHP 55</p>
+                        <button onclick="addToOrder('Blue Lemonade Yakult (M)', 55)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-lemon"></i>
+                        <h5>Blue Lemonade (L)</h5>
+                        <p>PHP 65</p>
+                        <button onclick="addToOrder('Blue Lemonade Yakult (L)', 65)">Add</button>
+                    </div>
+                </div>
+
+                <!-- 6. FRUIT TEA SERIES (Single price, no sizes) -->
+                <div class="category">
+                    <h4><i class="fas fa-leaf"></i> FRUIT TEA SERIES</h4>
+                    <div class="menu-item">
+                        <i class="fas fa-leaf"></i>
+                        <h5>Lychee</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Lychee Fruit Tea', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-leaf"></i>
+                        <h5>Green Apple</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Green Apple Fruit Tea', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-leaf"></i>
+                        <h5>Strawberry</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Strawberry Fruit Tea', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-leaf"></i>
+                        <h5>Blueberry</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Blueberry Fruit Tea', 45)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-leaf"></i>
+                        <h5>Blue Lemonade</h5>
+                        <p>PHP 45</p>
+                        <button onclick="addToOrder('Blue Lemonade Fruit Tea', 45)">Add</button>
+                    </div>
+                </div>
+
+                <!-- 7. HOT DRINKS (Single price, no sizes) -->
+                <div class="category">
+                    <h4><i class="fas fa-fire"></i> HOT DRINKS</h4>
+                    <div class="menu-item">
+                        <i class="fas fa-coffee"></i>
+                        <h5>Cafe</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Cafe', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-coffee"></i>
+                        <h5>Milk Chocolate</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Milk Chocolate', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-coffee"></i>
+                        <h5>White Coffee</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('White Coffee', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-coffee"></i>
+                        <h5>Caramel Macchiato</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Caramel Macchiato', 29)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-coffee"></i>
+                        <h5>Cappuccino</h5>
+                        <p>PHP 29</p>
+                        <button onclick="addToOrder('Cappuccino', 29)">Add</button>
+                    </div>
+                </div>
+
+                <!-- 8. ADD ONS (Single price, no sizes) -->
+                <div class="category">
+                    <h4><i class="fas fa-plus"></i> ADD ONS</h4>
+                    <div class="menu-item">
+                        <i class="fas fa-plus"></i>
+                        <h5>Fruit Jelly</h5>
+                        <p>PHP 10</p>
+                        <button onclick="addToOrder('Fruit Jelly', 10)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-plus"></i>
+                        <h5>Sauce</h5>
+                        <p>PHP 15</p>
+                        <button onclick="addToOrder('Sauce', 15)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-plus"></i>
+                        <h5>Cold Foam</h5>
+                        <p>PHP 20</p>
+                        <button onclick="addToOrder('Cold Foam', 20)">Add</button>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-plus"></i>
+                        <h5>Espresso Shot</h5>
+                        <p>PHP 20</p>
+                        <button onclick="addToOrder('Espresso Shot', 20)">Add</button>
+                    </div>
+
+                <!-- Repeat for all 8 categories -->
+                <!-- ... -->
+            </div>
+        </div>
+
+        <!-- Right side: Calculator (30% width) -->
+        <div id="calculatorBox">
+            <h4>Summary</h4>
+            <ul id="cartList"></ul>
+            <p>Total: PHP <span id="orderTotal">0</span></p>
+            <div class="client-money-container">
+                <input type="number" id="clientMoney" placeholder="Client's Money (PHP)" step="0.01" min="0" oninput="calculateChange()">
+                <button onclick="calculateChange()" class="calculate-btn">Calculate</button>
+            </div>
+            <p id="changeDisplay">Change: PHP <span id="change">0 (Add items first)</span></p>
+            <button onclick="placeOrder()">Place Order</button>
+            <button onclick="clearCart()">Clear</button>
+            <button onclick="closeOrderModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+
+    <div id="orderSummary">
+        <h4>Summary</h4>
+        <ul id="cartList"></ul>
+        <p>Total: PHP <span id="orderTotal">0</span></p>
+        <div class="client-money-container">
+            <input type="number" id="clientMoney" placeholder="Client's Money (PHP)" step="0.01" min="0" oninput="calculateChange()">
+            <button onclick="calculateChange()" class="calculate-btn">Calculate</button>
+        </div>
+        <p id="changeDisplay">Change: PHP <span id="change">0 (Add items first)</span></p>
+    
+
+    <div id="orderSummary">
+            <h4>Summary</h4>
+            <ul id="cartList"></ul>
+            <p>Total: PHP <span id="orderTotal">0</span></p>
+            <input type="number" id="clientMoney" placeholder="Client's Money (PHP)" step="0.01" min="0" oninput="calculateChange()">
+            <p id="changeDisplay">Change: PHP <span id="change">0</span></p>
+    </div>
+            <button onclick="placeOrder()">Place Order</button>
+            <button onclick="clearCart()">Clear</button>
+            <button onclick="closeOrderModal()">Close</button>
+</div>
+
+
+    <div id="settingsModal">
+        <h3>Settings</h3>
+        <button onclick="switchTheme('outside')">Outside (Sky Blue)</button>
+        <button onclick="switchTheme('inside')">Inside (Brown)</button>
+        <button onclick="closeSettings()">Close</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
